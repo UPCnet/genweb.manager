@@ -6,11 +6,19 @@ here = os.path.abspath(os.path.dirname(__file__))
 README = open(os.path.join(here, 'README.txt')).read()
 CHANGES = open(os.path.join(here, 'CHANGES.txt')).read()
 
-requires = ['pyramid', 'pyramid_debugtoolbar']
+requires = [
+    'pyramid',
+    'SQLAlchemy',
+    'transaction',
+    'repoze.tm2>=1.0b1', # default_commit_veto
+    'zope.sqlalchemy',
+    'WebError',
+    'requests',
+    ]
 
-setup(name='genweb.manager',
-      version='0.0',
-      description='genweb.manager',
+setup(name='genwebmanager',
+      version='1.0',
+      description='genwebmanager',
       long_description=README + '\n\n' +  CHANGES,
       classifiers=[
         "Programming Language :: Python",
