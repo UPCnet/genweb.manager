@@ -1,0 +1,18 @@
+#!/bin/sh
+
+#SYLAR
+rm -rf sylar.apache
+scp -r -i /home/carles.bruguera/carles.bruguera.rsa root@sylar:/etc/httpd/conf/sites-enabled sylar.apache
+
+#SYRMA1
+rm -rf syrma1.nginx
+mkdir syrma1.nginx
+scp -i /home/carles.bruguera/carles.bruguera.rsa root@syrma1://var/plone/webupcFE/production/manual.conf syrma1.nginx/
+scp -i /home/carles.bruguera/carles.bruguera.rsa root@syrma1://var/plone/webupcFE/production/manualssl.conf syrma1.nginx/
+scp -i /home/carles.bruguera/carles.bruguera.rsa root@syrma1://var/plone/webupcFE/production/websupc.conf syrma1.nginx/
+scp -i /home/carles.bruguera/carles.bruguera.rsa root@syrma1://var/plone/webupcFE/production/websupcssl.conf syrma1.nginx/
+
+#SUHAIL
+rm -rf suhail.apache
+mkdir suhail.apache
+scp /home/carles.bruguera/carles.bruguera.rsa root@suhail://etc/apache2/sites-enabled/intranet* suhail.apache/

@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+    <head>
+    
+        <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+        
+        <title tal:content="project"></title>
+        
+        <link rel="stylesheet" type="text/css" href="${request.static_url('genwebmanager:static/styles.css')}" />
+               
+        <!--[if IE]>
+        
+        <style type="text/css">
+        .clear {
+          zoom: 1;
+          display: block;
+        }
+        </style>
+
+        
+        <![endif]-->
+        
+    </head>
+    
+    <body>
+
+    	<div class="section" id="page"> <!-- Defining the #page section with the section tag -->
+    
+            <div class="header"> <!-- Defining the header section of the page with the appropriate tag -->
+
+                <!--h1>Genweb Control</h1>
+                <h3>Panell d'informació dels genwebs</h3-->
+
+                <h1>GenWEB Manager</h1>
+                <h3>"One tool to rule them all"</h3>
+
+                
+                <div class="nav clear"> <!-- The nav link semantically marks your main site navigation -->
+                    <ul>
+                        <li><a id="entornstab" href="javascript:showentorns();">Entorns</a></li>
+                        <li><a id="instanciestab" href="javascript:showinstancies();">Instàncies</a></li>
+                    </ul>
+                </div>
+            
+            </div>
+
+            <div class="section" id="instancies"> <!-- A new section with the articles -->
+            
+                <div class="article" id="article1"> <!-- The new article tag. The id is supplied so it can be scrolled into view. -->
+                    <h2>Instàncies</h2>
+                    
+                    <div class="line"></div>
+                    
+                    <div class="articleBody clear">
+                    
+                        <div id="llistat-instancies">
+                        <h3>Llistat d'instàncies <span id="globalinstancecount"></span></h3>
+
+                    <input type="text" id="instancesearch" name="instancesearch" >                    
+
+                        
+                         <tal:instancies repeat="instancia instancies">
+                            <div class="instancia">
+                                <img class="more" src="${request.static_url('genwebmanager:static/details.gif')}">
+                                <strong class="title" tal:content="instancia.title | 'caca'"></strong><br/>
+                                URL : <a tal:attributes="href instancia.urls[0]['gwurl']|nothing" tal:content="instancia.urls[0]['gwurl']|'[ NO DISPOSEM DE LA URL ]'">https://intranet2.etseib.upc.edu</a>
+                                
+                                <div class="details" style="display:none;">
+                                
+                                    
+                                  <strong style="font-size:20px;" tal:content='string:Entorn ${instancia.entorn} "${instancia.dorsal}"'></strong>
+                                  
+                                  <br/>
+                                  <br/>
+                                  
+                                  <strong> Varnish</strong>
+                                   <ul tal:define="urlbase string:${instancia.varnishport}/${instancia.mountpoint}/${instancia.plonesite}">
+                                      <li> Principal - <a target="_blank" tal:attributes="href string:http://sylar.upc.es:${urlbase}" tal:content="string:http://sylar.upc.es:${urlbase}">sylar.upc.es A</a></li>
+                                      <input type="button" id="purgecache" tal:attributes="onclick string:javascript:purgeVarnish('${instancia.varnishtelnet}')" value="Purgar caché">
+                                   </ul>
+                                   <br/>
+                                   
+                                   <strong> URL Haproxy</strong> 
+                                   <ul tal:define="urlbase string:${instancia.haproxyport}/${instancia.mountpoint}/${instancia.plonesite}">
+                                      <li> Principal - <a target="_blank" tal:attributes="href string:http://sylar.upc.es:${urlbase}" tal:content="string:http://sylar.upc.es:${urlbase}">sylar.upc.es A</a></li>
+                                      <li> Estadístiques - <a target="_blank" tal:attributes="href string:http://sylar.upc.es:${instancia.haproxyport}/haproxy-status" tal:content="string:http://sylar.upc.es:${instancia.haproxyport}/haproxy-status">sylar.upc.es A</a></li>                                      
+                                   </ul>
+                                   <br/>                                   
+    
+                                
+                                   <strong>Frontends</strong>
+                                   <ul tal:define="urlbase string:${instancia.zeoport}/${instancia.mountpoint}/${instancia.plonesite}">
+                                      <li> SYLAR A - <a target="_blank" tal:attributes="href string:http://sylara.upc.es:${urlbase}" tal:content="string:http://sylara.upc.es:${urlbase}">sylar.upc.es A</a></li>
+                                      <li> SYLAR B - <a target="_blank" tal:attributes="href string:http://sylarb.upc.es:${urlbase}" tal:content="string:http://sylarb.upc.es:${urlbase}">sylar.upc.es B</a></li>
+                                      <li> SYLAR C - <a target="_blank" tal:attributes="href string:http://sylarc.upc.edu:${urlbase}" tal:content="string:http://sylarc.upc.edu:${urlbase}">sylar.upc.es C</a></li>                                                                            
+                                   </ul>
+                                   
+                                   <br/>
+                                   <strong>URI's de copia per scp dels Data.fs i blobs de mebsuta</strong>
+                                   
+                                   <ul style="text-align:right;" tal:define="urlbase string:${instancia.zeoport}/${instancia.mountpoint}/${instancia.plonesite}">
+                                      <li> Data.fs <input readonly style="width:90%;font-size:11px;" type="text" tal:attributes="value string:scp ${rsaparam} root@${instancia.backend}:/var/plone/genwebupcZEO/produccio/var/filestorage/Data_${instancia.mountpoint}.fs ." /></li>
+                                      <li> Blobs <input readonly style="width:90%;font-size:11px;" type="text" tal:attributes="value string:scp ${rsaparam} -r root@${instancia.backend}:/var/plone/genwebupcZEO/produccio/var/blobs/${instancia.mountpoint} ." /></li>
+                                   </ul>
+                                   
+                                </div>
+                                
+                            </div>
+
+                         </tal:instancies> 
+                        </div>
+                    </div>
+
+                </div>            
+            </div>    
+                    
+            
+            <div class="section" id="entorns" style="display:none;">  <!-- A new section with the articles -->
+
+				<!-- Article 1 start -->
+                
+                <div class="article" id="article1"> <!-- The new article tag. The id is supplied so it can be scrolled into view. -->
+                    <h2>Entorns</h2>
+                    
+                    <div class="line"></div>
+                    
+                    <div class="articleBody clear">
+                    
+                      <ul>
+                          <tal:elinks repeat="entorn entorns">
+                             <li class="entornlink" tal:content="entorn.id"></li>
+                          </tal:elinks>
+                          
+                      </ul>
+                       <tal:entorns repeat="entorn entorns">
+                        <div class="info" tal:attributes="id string:entorn-${entorn.id};
+                                                          style python:primer and 'display:block' or '';" 
+                                          tal:define="ent entorn.entorn;
+                                                      primer repeat.entorn.start"> 
+                        <h2 tal:content="string:Entorn ${entorn.id}">Entorn 1</h2>
+                        
+                        <p class="infoitem"><label tal:content="ent.zeoport">Port :</label></p>
+                        <p class="infoitem"><label>Backend :</label><span tal:replace="ent.backend"></span></p>
+                        <p class="infoitem"><label>Haproxy :</label><a target="_blank" tal:attributes="href string:http://sylar.upc.es:${ent.haproxyport}/haproxy-status" tal:content="string:http://sylar.upc.es:${ent.haproxyport}/haproxy-status">sylar.upc.es A</a></p>
+                        
+                        <div class="line"></div>
+                                            
+                        
+                        <div id="llistat-instancies">
+                        <h3>Llistat d'instàncies (<span tal:content="ent.count"></span>)</h3>
+                        
+                         <tal:instancies repeat="instancia ent.instancies">
+                            <div class="instancia">
+                                <img class="more" src="${request.static_url('genwebmanager:static/details.gif')}">
+                                <strong class="title" tal:content="instancia.title"></strong><br/>
+                                URL : <a tal:attributes="href instancia.urls[0]" tal:content="instancia.urls[0]">https://intranet2.etseib.upc.edu</a>
+                                
+                            </div>
+
+                         </tal:instancies> 
+                        </div>
+                      </div>
+                  </tal:entorns
+
+
+                    
+                    </div>
+                </div>
+                
+				<!-- Article 1 end -->
+
+
+
+
+            </div>
+
+        <div class="footer"> <!-- Marking the footer section -->
+
+          <div class="line"></div>
+           
+           <p>UPCNET 2011</p> <!-- Change the copyright notice -->
+           
+           <a href="#" class="up">Go UP</a>
+           
+
+        </div>
+            
+		</div> <!-- Closing the #page section -->
+        
+        <!-- JavaScript Includes -->
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+        <script type="text/javascript" src="${request.static_url('genwebmanager:static/genwebmanager.js')}"></script>                
+    </body>
+</html>
