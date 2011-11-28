@@ -14,7 +14,7 @@ HAPROXY_BASE = 10000
 ZEOCLIENT_BASE = 11000
 DORSALS = {"1":"Víctor Valdés", "2":"Dani Alves", "3":"Piqué", "4":"Cesc", "5":"Puyol", "6":"Xavi", "7":"David Villa", "8":"A. Iniesta",
            "9":"Bojan", "10":"Messi", "11":"Jeffren", "12": "Unknown", "13":"Pinto", "14":"Mascherano", "15":"Keita", "16":"Sergio" }
-
+SYLARS = {'a':'sylara.upc.es','b':'sylarb.upc.es','c':'sylarc.upc.edu'}
 
 def getPortsByPort(port):
     """
@@ -181,13 +181,12 @@ def addToRedirections(redirections,redirection):
 #      redirections[gw]=redirection
 #      redirections[gw]['gwurl']=gw
       
-    
 def getInstanceInfo(instance):
     """
     """
-    sl = chr(random.randrange(97,100))
+    sl = SYLARS[chr(random.randrange(97,100))]
     print 'Requesting %s:%s Information' % (sl,instance) 
-    stats_url = 'http://sylar%s:%s/gwc_stats_info' % (sl,instance)
+    stats_url = 'http://%s:%s/gwc_stats_info' % (sl,instance)
     req = requests.get(stats_url,auth=('admin','tzmLidT8'))
     json_stats = req.content
     #temporal fins que recataloguem                
