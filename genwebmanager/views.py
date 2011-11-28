@@ -7,6 +7,8 @@ from pyramid.response import Response
 from paste.httpheaders import AUTHORIZATION
 import json
 
+REDIRECTIONS_PATH = '/var/pyramid/gwmanager/src/genwebmanager/redirections'
+
 def _get_basicauth_credentials(request):
     authorization = AUTHORIZATION(request.environ)
     try:
@@ -34,7 +36,7 @@ def main(request):
         rsaparam = '-i ~/rsa/%(login)s.rsa' %  (auth)
     else:
         rsaparam = ''
-    data = parseData(folderbase='/var/pyramid/gwcontrol/src/genwebmanager/redirections')
+    data = parseData(folderbase=REDIRECTIONS_PATH)
 
     entorns = [dict(id=int(a),entorn=data['entorns'][a]) for a in data['entorns'].keys()]
     instancies = [data['instancies'][a] for a in data['instancies'].keys()]
@@ -50,7 +52,7 @@ def export(request):
     root = dbsession.query(MyModel).filter(MyModel.name==u'root').first()
     auth = _get_basicauth_credentials(request)
 
-    data = parseData(folderbase='/var/pyramid/gwcontrol/src/genwebmanager/redirections')
+    data = parseData(folderbase=REDIRECTIONS_PATH)
 
     entorns = [dict(id=int(a),entorn=data['entorns'][a]) for a in data['entorns'].keys()]
     instances = [data['instancies'][a] for a in data['instancies'].keys()]
