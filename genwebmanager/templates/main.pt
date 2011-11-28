@@ -189,7 +189,7 @@
 		</div> <!-- Closing the #page section -->
         
         <!-- JavaScript Includes -->
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
-        <script type="text/javascript" src="${request.static_url('genwebmanager:static/genwebmanager.js')}"></script>                
+        <script type="text/javascript" src="${request.static_url('genwebmanager:static/jquery.min.js')}"></script>
+        <script type="text/javascript" src="${request.static_url('genwebmanager:static/gwmanager.js')}"></script>                
     </body>
 </html>
