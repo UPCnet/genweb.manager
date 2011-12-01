@@ -16,8 +16,7 @@ def main(global_config, **settings):
                     renderer='templates/main.pt')
     config.add_route('purge', '/purge')
     config.add_view('genwebmanager.views.purge',
-                    route_name='purge',
-                    renderer='templates/ajax.pt')
+                    route_name='purge')
     config.add_route('export','/export')
     config.add_view('genwebmanager.views.export',
                     route_name='export')

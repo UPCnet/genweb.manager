@@ -41,7 +41,7 @@ def main(request):
     entorns = [dict(id=int(a),entorn=data['entorns'][a]) for a in data['entorns'].keys()]
     instancies = [data['instancies'][a] for a in data['instancies'].keys()]
     
-    returndict = {'root':root, 'project':'Genweb Control','rsaparam':rsaparam}
+    returndict = {'root':root, 'project':'Genweb Manager','rsaparam':rsaparam}
     returndict['entorns']=sorted(entorns,key=lambda entorn:entorn['id'])
     returndict['instancies']=sorted(instancies,key=lambda instancia:instancia['title'])
     return returndict
@@ -63,9 +63,11 @@ def export(request):
             url = ins['urls'][0]['gwurl'].replace('https','http')
         json_data = dict(url=url,
                          zeoport=ins['zeoport'],
+                         debugport=ins['debugport'],
                          mountpoint=ins['mountpoint'],
                          plonesite=ins['plonesite'],
-                         title=ins['title']
+                         title=ins['title'],
+                         entorn=ins['entorn'],
                          )
         json_data_list.append(json_data)
 
@@ -80,15 +82,18 @@ def purge(request):
     import telnetlib
 
     telnetport = request.GET.get('telnetport',None)
-    
+        
+    value = {'result':False}
 
     if telnetport:
-      tn = telnetlib.Telnet('sylar.upc.es',int(telnetport))
-      tn.write("purge.url .*\n") 
-      tn.close()        
-      return True    
-    else:
-      return False
-    
-    
-    return {'root':root, 'project':'genwebmanager'}    
+      try:   
+          tn = telnetlib.Telnet('sylar.upc.es',int(telnetport))
+          tn.write("purge.url .*\n") 
+          tn.close()        
+          value['result']=True
+      except:
+          pass
+
+    response = Response(json.dumps(value))
+    response.content_type = 'application/json'
+    return response

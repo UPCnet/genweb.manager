@@ -8,10 +8,11 @@ import requests
 
 REDIRECTIONS_FOLDER = '.'
 https_redirections = {}
-VARNISH_TELNET_BASE = 9101
+VARNISH_TELNET_BASE = 9100
 VARNISH_BASE = 9000
 HAPROXY_BASE = 10000
 ZEOCLIENT_BASE = 11000
+DEBUGCLIENT_BASE = 11900
 DORSALS = {"1":"Víctor Valdés", "2":"Dani Alves", "3":"Piqué", "4":"Cesc", "5":"Puyol", "6":"Xavi", "7":"David Villa", "8":"A. Iniesta",
            "9":"Bojan", "10":"Messi", "11":"Jeffren", "12": "Unknown", "13":"Pinto", "14":"Mascherano", "15":"Keita", "16":"Sergio" }
 SYLARS = {'a':'sylara.upc.es','b':'sylarb.upc.es','c':'sylarc.upc.edu'}
@@ -27,6 +28,7 @@ def getPortsByPort(port):
             'varnishtelnet':str(VARNISH_TELNET_BASE+magicnumber), 
             'haproxyport':str(HAPROXY_BASE+magicnumber), 
             'entorn':str(magicnumber), 
+	    'debugport':str(DEBUGCLIENT_BASE+magicnumber),
             'varnishport':str(VARNISH_BASE+magicnumber)}        
 
 def parseNginxRedirections(fi):
@@ -75,8 +77,9 @@ def parseNginxRedirections(fi):
                     url = '%s://%s%s' % (protocol,domain,base_path)
                     redirection_data = dict(varnishport = port,
                                         haproxyport = str(HAPROXY_BASE+magicnumber),
-                                        varnishtelnet = str(VARNISH_BASE+magicnumber),
+                                        varnishtelnet = str(VARNISH_TELNET_BASE+magicnumber),
                                         zeoport = str(ZEOCLIENT_BASE+magicnumber),
+                                        debugport = str(DEBUGCLIENT_BASE+magicnumber),
                                         gwurl = url.rstrip('/'),
                                         entorn = magicnumber,                                    
                                         mountpoint = mountpoint,
@@ -152,8 +155,9 @@ def parseApacheRedirections(fi):
                     url = '%s://%s%s' % (protocol,domain,base_path)
                     redirection_data = dict(varnishport = port,
                                         haproxyport = str(HAPROXY_BASE+magicnumber),
-                                        varnishtelnet = str(VARNISH_BASE+magicnumber),
+                                        varnishtelnet = str(VARNISH_TELNET_BASE+magicnumber),
                                         zeoport = str(ZEOCLIENT_BASE+magicnumber),
+                                        debugport = str(DEBUGCLIENT_BASE+magicnumber),
                                         entorn = magicnumber,
                                         gwurl = url.rstrip('/'),
                                         mountpoint = mountpoint,
@@ -240,6 +244,7 @@ def parseData(folderbase='redirections'):
             # El primer cop que ens trobem una url d'una instancia, omplim les dades daquesta
             # La resta de vegades ja les tindrem
             data['zeoport']=urls[0]['zeoport']            
+            data['debugport']=urls[0]['debugport']
             data['varnishtelnet']=urls[0]['varnishtelnet']
             data['varnishport']=urls[0]['varnishport']
             data['haproxyport']=urls[0]['haproxyport']
@@ -276,6 +281,7 @@ def parseData(folderbase='redirections'):
         if entorn == {}:
             entorn['instancies']=[]
             entorn['zeoport']=instancia['zeoport']
+            entorn['debugport']=instancia['debugport']
             entorn['varnishtelnet']=instancia['varnishtelnet']
             entorn['varnishport']=instancia['varnishport']
             entorn['haproxyport']=instancia['haproxyport']

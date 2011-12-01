@@ -49,6 +49,15 @@ function showinstancies()
 
 function purgeVarnish(port)
 {
-    $.get('purge?telnetport='+port)
-    alert("S'ha purgat el varnish de sylar.upc.es al port "+port)
+    $.get('purge',{telnetport:port},function(data){
+      if (data['result']==true)
+        {
+          alert("S'ha purgat el varnish de sylar.upc.es.")
+        }
+      else
+        {
+          alert("No s'ha pogut purgat el varnish de al port.")          
+        }
+    },'json')
+    
 }
